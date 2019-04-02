@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_gradient" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/background_white"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="20sp"
+            android:textColor="#000" />
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_person"
+            android:drawablePadding="20dp"
+            android:hint="Username"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:text="Password"
+            android:textColor="#000" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/lock"
+            android:drawablePadding="20dp"
+            android:hint="Enter Password"
+            android:inputType="textPassword"
+            android:textColor="#000" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rec_gradient"
+            android:text="Login"
+            android:textSize="28sp"
+            android:textAllCaps="false"
+            android:textColor="#FFF" />
+
+        <Button
+            android:id="@+id/forgetPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rec_gradient_fb"
+            android:text="Forget Password"
+            android:textAllCaps="false"
+            android:textSize="28sp"
+            android:textColor="#FFF" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageVIew"
+        android:layout_width="231dp"
+        android:layout_height="154dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_school_black_24dp" />
+
+    <TextView
+        android:textSize="44sp"
+        android:textStyle="bold|italic"
+        android:textColor="#FFF"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/imageVIew"
+        android:text="Sign In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"/>
+</RelativeLayout>

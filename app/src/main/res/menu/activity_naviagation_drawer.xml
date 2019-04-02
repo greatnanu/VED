@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/top">
+        <item
+            android:id="@+id/entryRecord"
+            android:icon="@drawable/entry"
+            android:title="Entry Record"
+            />
+        <item
+            android:id="@+id/exitRecord"
+            android:icon="@drawable/exit"
+            android:title="Exit Record" />
+
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/bottom">
+        <item
+            android:id="@+id/entryRegister"
+            android:icon="@drawable/add"
+            android:title="In Entry" />
+        <item
+            android:id="@+id/exitRegister"
+            android:icon="@drawable/add"
+            android:title="Out Entry" />
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/last">
+        <item android:title="Update Password"
+            android:id="@+id/update"
+            android:icon="@drawable/lock"/>
+        <item android:title="About Us "
+            android:id="@+id/aboutUs"
+            android:icon="@drawable/help"/>
+    </group>
+    <item android:id="@+id/validity"
+        android:title="App expiry"
+        android:icon="@drawable/expiry"/>
+
+</menu>

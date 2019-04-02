@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="550dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#232323"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/dialog_name_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="163dp"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            tools:text="Name" />
+        <Button
+            android:id="@+id/dialog_mobile_id"
+            android:textAlignment="textStart"
+            android:drawableStart="@drawable/dialog_call"
+            android:drawablePadding="22dp"
+            android:padding="23dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            tools:text="Mobile Call"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="start" />
+        <Button
+            android:id="@+id/dialog_purpose_id"
+            android:drawablePadding="22dp"
+            android:padding="23dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:drawableStart="@drawable/purpose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            tools:text="Purpose"
+            android:layout_gravity="start" />
+        <Button
+            android:id="@+id/dialog_time_id"
+            android:drawablePadding="22dp"
+            android:padding="23dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:drawableStart="@drawable/entrytime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            tools:text="Entry Time"
+            android:layout_gravity="start" />
+        <Button
+            android:id="@+id/dialog_outTime"
+            android:drawablePadding="22dp"
+            android:padding="23dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:drawableStart="@drawable/exittime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:textColor="#000"
+            tools:text="Exit Time"
+            android:layout_gravity="start" />
+        <Button
+            android:id="@+id/dialog_address_id"
+            android:drawablePadding="22dp"
+            android:padding="23dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:drawableStart="@drawable/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            tools:text="Address"
+            android:layout_gravity="start" />
+        <Button
+            android:id="@+id/audioPlay"
+            android:drawablePadding="22dp"
+            android:padding="23dp"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:drawableStart="@drawable/audio_plau"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:text="@string/play"
+            android:layout_gravity="start" />
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/dialog_photo_id"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/userphoto"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/person_image_school_desc"/>
+
+</RelativeLayout>
