@@ -100,7 +100,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:padding="5dp"
-        android:src="@drawable/ic_school_black_24dp" />
+        android:src="@drawable/ved1" />
 
     <TextView
         android:textSize="44sp"

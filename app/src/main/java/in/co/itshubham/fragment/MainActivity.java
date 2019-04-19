@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 builder.setTitle("Get Password");
                 final EditText username = new EditText(MainActivity.this);
+                username.setHint("Enter Username ");
                 username.setTextColor(Color.WHITE);
                 username.setInputType(InputType.TYPE_CLASS_TEXT );
                 builder.setView(username);

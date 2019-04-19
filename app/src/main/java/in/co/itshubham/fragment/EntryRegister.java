@@ -20,8 +20,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -39,8 +37,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,17 +45,25 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -71,6 +75,13 @@ public class EntryRegister extends AppCompatActivity
     AlertDialog.Builder builder;
     Boolean isRecording  = false;
     AlertDialog dialog;
+    private RequestOptions requestOptions =new RequestOptions()
+            .centerCrop()
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.loading);
+    private List<Profile> lstProfile = new ArrayList<>();
+    private JsonArrayRequest ArrayRequest;
+    private RequestQueue requestQueue;
     private ProgressDialog progressDialog;
     private MediaRecorder mediaRecorder;
     private final int IMG_REQUEST_CAMERA = 1;
@@ -90,7 +101,7 @@ public class EntryRegister extends AppCompatActivity
         setContentView(R.layout.activity_entry_register);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getProfile();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -119,29 +130,30 @@ public class EntryRegister extends AppCompatActivity
         final TextView frag_address = about.findViewById(R.id.about_address);
         final TextView frag_email = about.findViewById(R.id.about_email);
         final ImageView frag_photo = about.findViewById(R.id.about_photo);
-        frag_name.setText("Shubham Gupta");
-        frag_mobile.setText("8684015857");
+        frag_name.setText(Profile.getPerson_name());
+        frag_mobile.setText(Profile.getMobile());
         frag_mobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                    String number=mData.get(vHolder.getAdapterPosition()).getMobile();
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+"8684015857"));
+                callIntent.setData(Uri.parse("tel:"+Profile.getMobile()));
                 startActivity(callIntent);
             }
         });
-        frag_desc.setText("Web and App Developer");
-        frag_email.setText("Sg19897.3sg@gmail.com");
+        frag_desc.setText(Profile.getDesc());
+        frag_email.setText(Profile.getEmail());
         frag_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SENDTO,Uri.fromParts(
-                        "mailto","Sg19897.3sg@gmail.com", null));
+                        "mailto",Profile.getEmail(), null));
                 startActivity(Intent.createChooser(intent, "Send email..."));
             }
         });
-        frag_address.setText("C-11 Pashupati Nagar Naubasta Kanpur");
-        frag_photo.setImageResource(R.drawable.address);
+        frag_address.setText(Profile.getAddress());
+//        frag_photo.setImageResource(R.drawable.address);
+        Glide.with(getApplicationContext()).load(Profile.getImage_url()).apply(requestOptions).into(frag_photo);
         Objects.requireNonNull(about.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         tick = findViewById(R.id.checkboxEntry);
@@ -336,14 +348,19 @@ public class EntryRegister extends AppCompatActivity
         if (isRecording==true){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mediaRecorder.resume();
+                Toast.makeText(this, "Recording resumed", Toast.LENGTH_SHORT).show();
+                Log.d("shubham","Reco Resumed");
             }
         }
     }
 //    @Override
 //    protected void onStart() {
 //        super.onStart();
-//        if (isRecording==false){
-//            recordAudio();
+//        if (isRecording==true){
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                mediaRecorder.resume();
+//                Toast.makeText(this, "Recording Resumed", Toast.LENGTH_SHORT).show();
+//            }
 //
 //        }
 //
@@ -355,7 +372,8 @@ public class EntryRegister extends AppCompatActivity
         if (isRecording==true){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mediaRecorder.resume();
-                Toast.makeText(this, "Recording Resumed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Recording Restarted", Toast.LENGTH_SHORT).show();
+                Log.d("shubham","Activity Restarted");
             }
         }
     }
@@ -368,7 +386,23 @@ public class EntryRegister extends AppCompatActivity
             mediaRecorder.reset();
             mediaRecorder.release();
             Toast.makeText(this, "Recording Failed", Toast.LENGTH_SHORT).show();
+            Log.d("shubham","Activity Destroyed");
 
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (submit.VISIBLE==View.VISIBLE){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (isRecording==true){
+                    mediaRecorder.pause();
+                    Toast.makeText(this, "Recording Paused", Toast.LENGTH_SHORT).show();
+                    Log.d("shubham","Activity Paused");
+                }
+
+            }
         }
     }
 
@@ -379,8 +413,9 @@ public class EntryRegister extends AppCompatActivity
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 if (isRecording==true){
                     mediaRecorder.pause();
-                    isRecording=false;
-                    Toast.makeText(this, "Recording Paused", Toast.LENGTH_SHORT).show();
+//                    isRecording=false;
+                    Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show();
+                    Log.d("shubham","Activity Stopped");
                 }
 
             }
@@ -610,5 +645,40 @@ public class EntryRegister extends AppCompatActivity
         address.setVisibility(View.GONE);
         submit.setVisibility(View.GONE);
 
+    }
+    public void getProfile(){
+        lstProfile.clear();
+        ArrayRequest = new JsonArrayRequest(Constants.URL_GETPROFILE, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                JSONObject jsonObject = null;
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+                        jsonObject = response.getJSONObject(i);
+                        Profile profile = new Profile();
+                        profile.setPerson_name(jsonObject.getString("name"));
+                        profile.setEmail(jsonObject.getString("email"));
+                        profile.setMobile(jsonObject.getString("mobile"));
+                        profile.setAddress(jsonObject.getString("address"));
+                        profile.setImage_url(jsonObject.getString("image_url"));
+                        profile.setDesc(jsonObject.getString("description"));
+                        lstProfile.add(profile);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("error", error.getMessage());
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(EntryRegister.this);
+        requestQueue.add(ArrayRequest);
     }
 }

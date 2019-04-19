@@ -103,8 +103,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>  {
                     frag_exitTime.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String datetime = java.text.SimpleDateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-                            updateExitTime(datetime,mData.get(vHolder.getAdapterPosition()).getId());
+                            updateExitTime(mData.get(vHolder.getAdapterPosition()).getId());
                         }
                     });
                 }
@@ -131,7 +130,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>  {
         Glide.with(mContext).load(mData.get(position).getImage_url()).apply(options).into(holder.photo);
     }
 
-    private void updateExitTime(final String exittime, final String id) {
+    private void updateExitTime( final String id) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_UPDATEEXITTIME,
                 new Response.Listener<String>() {
@@ -157,7 +156,6 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>  {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("id",id);
-                params.put("exittime",exittime);
                 return params;
             }
         };

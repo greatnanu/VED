@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class Upload {
 
-    public static final String UPLOAD_URL= "http://schmgmt.xyz/upload.php";
+    public static final String UPLOAD_URL= "http://vedsoftwares.com/shubham/upload.php";
 
     private int serverResponseCode;
 

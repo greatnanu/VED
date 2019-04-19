@@ -86,7 +86,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_school_black_24dp"
+        android:src="@drawable/ved1"
         android:padding="5dp"
         android:layout_width="70dp"
         android:layout_height="70dp" />

@@ -22,9 +22,9 @@
     <string name="visit_purpose">Purpose of Visit</string>
     <string name="person_address">Address</string>
     <string name="register">Submit</string>
-    <string name="studentName">Student\'s Name</string>
-    <string name="studentDetails">Student Details</string>
-    <string name="relation">Relation with the student</string>
+    <string name="studentName">Additional Details 1</string>
+    <string name="studentDetails">Additional Details 2 </string>
+    <string name="relation">Additional Details 3</string>
     <string name="play">Play Recording</string>
     <string name="forgetPassword">Forget Password ?</string>
 </resources>

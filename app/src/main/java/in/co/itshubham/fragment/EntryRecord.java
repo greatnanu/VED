@@ -1,5 +1,4 @@
 package in.co.itshubham.fragment;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -47,6 +46,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,22 +59,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 public class EntryRecord extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DatePickerFragment.DateDialogListener, SearchView.OnQueryTextListener,SwipeRefreshLayout.OnRefreshListener,LogOutTimerUtil.LogOutListener {
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar = null;
     private RecyclerView myrv;
+    private RequestOptions requestOptions =new RequestOptions()
+            .centerCrop()
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.loading);
+    private List<Profile> lstProfile = new ArrayList<>();
     AlertDialog.Builder builder;
     RvAdapter myAdapter;
     private JsonArrayRequest ArrayRequest;
     private List<Anime> lstAnime = new ArrayList<>();
     private RequestQueue requestQueue;
     Date d = new Date();
-    private String url = "http://schmgmt.xyz/showData.php?username=";
-    private String urlAll = "http://schmgmt.xyz/showDataAll.php?username=";
-    private String urlSerach = "http://schmgmt.xyz/searchUser.php?username=";
+    private String url = "http://vedsoftwares.com/shubham/showData.php?username=";
+    private String urlAll = "http://vedsoftwares.com/shubham/showDataAll.php?username=";
+    private String urlSerach = "http://vedsoftwares.com/shubham/searchUser.php?username=";
     private ProgressDialog progressDialog;
     Dialog myDialog;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -118,6 +123,7 @@ public class EntryRecord extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry_record);
+        getProfile();
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Log.d("shubham","Created");
@@ -147,29 +153,30 @@ public class EntryRecord extends AppCompatActivity
         final TextView frag_address = myDialog.findViewById(R.id.about_address);
         final TextView frag_email = myDialog.findViewById(R.id.about_email);
         final ImageView frag_photo = myDialog.findViewById(R.id.about_photo);
-        frag_name.setText("Shubham Gupta");
-        frag_mobile.setText("8684015857");
+        frag_name.setText(Profile.getPerson_name());
+        frag_mobile.setText(Profile.getMobile());
         frag_mobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                    String number=mData.get(vHolder.getAdapterPosition()).getMobile();
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+"8684015857"));
+                callIntent.setData(Uri.parse("tel:"+Profile.getMobile()));
                 startActivity(callIntent);
             }
         });
-        frag_desc.setText("Web and App Developer");
-        frag_email.setText("Sg19897.3sg@gmail.com");
+        frag_desc.setText(Profile.getDesc());
+        frag_email.setText(Profile.getEmail());
         frag_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SENDTO,Uri.fromParts(
-                        "mailto","Sg19897.3sg@gmail.com", null));
+                        "mailto",Profile.getEmail(), null));
                 startActivity(Intent.createChooser(intent, "Send email..."));
             }
         });
-        frag_address.setText("C-11 Pashupati Nagar Naubasta Kanpur");
-        frag_photo.setImageResource(R.drawable.address);
+        frag_address.setText(Profile.getAddress());
+//        frag_photo.setImageResource(R.drawable.address);
+        Glide.with(getApplicationContext()).load(Profile.getImage_url()).apply(requestOptions).into(frag_photo);
         Objects.requireNonNull(myDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -177,7 +184,7 @@ public class EntryRecord extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 if (isNetworkAvailable()) {
-                    startActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://schmgmt.xyz/form_email.php?username=" + SharedPrefManager.getInstance(getApplicationContext()).getUsername())));
+                    startActivity(new Intent("android.intent.action.VIEW", Uri.parse("http://vedsoftwares.com/shubham/form_email.php?username=" + SharedPrefManager.getInstance(getApplicationContext()).getUsername())));
                 } else {
                     Toast.makeText(EntryRecord.this, "Internet Not Connected", Toast.LENGTH_SHORT).show();
                 }
@@ -363,7 +370,7 @@ public class EntryRecord extends AppCompatActivity
     @Override
     public void onFinishDialog(Date date) {
         if ((int) (date.getTime() / 86400000) < (int) (d.getTime() / 86400000)) {
-            int i = (int) ((d.getTime() / 86400000) - (date.getTime() / 86400000)) - 1;
+            int i = (int) ((d.getTime() / 86400000) - (date.getTime() / 86400000))-1 ;
             try {
                 lstAnime.clear();
                 jsoncall(i);
@@ -455,6 +462,42 @@ public class EntryRecord extends AppCompatActivity
         requestQueue = Volley.newRequestQueue(EntryRecord.this);
         requestQueue.add(ArrayRequest);
 
+    }
+    public void getProfile(){
+        lstProfile.clear();
+        ArrayRequest = new JsonArrayRequest(Constants.URL_GETPROFILE, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                JSONObject jsonObject = null;
+                for (int i = 0; i < response.length(); i++) {
+
+                    try {
+                        jsonObject = response.getJSONObject(i);
+                        Profile profile = new Profile();
+                        profile.setPerson_name(jsonObject.getString("name"));
+                        profile.setEmail(jsonObject.getString("email"));
+                        profile.setMobile(jsonObject.getString("mobile"));
+                        profile.setAddress(jsonObject.getString("address"));
+                        profile.setImage_url(jsonObject.getString("image_url"));
+                        profile.setDesc(jsonObject.getString("description"));
+                        lstProfile.add(profile);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                setRvadapter(lstAnime);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("error", error.getMessage());
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(EntryRecord.this);
+        requestQueue.add(ArrayRequest);
     }
 
     public void setRvadapter(List<Anime> lst) {
